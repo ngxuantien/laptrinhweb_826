@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MecuryshopModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="Customer_Id" />
+    </Key>
+    <Property Name="Customer_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Customer_Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Customer_Email" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="Customer_Password" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="Customer_Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Customer_Address" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Customer_City" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Customer_Province" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="DonHangs" Relationship="Self.FK_DonHang_tbl_Customer1" FromRole="Customer" ToRole="DonHang" />
+  </EntityType>
+  <EntityType Name="DonHang">
+    <Key>
+      <PropertyRef Name="MaDonHang" />
+    </Key>
+    <Property Name="MaDonHang" Type="Int32" Nullable="false" />
+    <Property Name="Customer_Id" Type="Int32" />
+    <Property Name="NgayDat" Type="DateTime" Precision="3" />
+    <Property Name="NgayGiao" Type="DateTime" Precision="3" />
+    <Property Name="TinhTrangGiaoHang" Type="Boolean" />
+    <Property Name="TinhTrangThanhToan" Type="Boolean" />
+    <NavigationProperty Name="Customer" Relationship="Self.FK_DonHang_tbl_Customer1" FromRole="DonHang" ToRole="Customer" />
+    <NavigationProperty Name="CTDonHangs" Relationship="Self.FK_CTDonHang_DonHang1" FromRole="DonHang" ToRole="CTDonHang" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="Product_Id" />
+    </Key>
+    <Property Name="Product_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Product_Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Product_Size" Type="Int32" />
+    <Property Name="Product_Price" Type="Double" />
+    <Property Name="Product_Img" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="Product_Status" Type="Boolean" />
+    <Property Name="Product_Filter" Type="Int32" />
+    <NavigationProperty Name="CTDonHangs" Relationship="Self.FK_CTDonHang_tbl_Product1" FromRole="Product" ToRole="CTDonHang" />
+    <Property Name="Product_Promotional_Price" Type="Double" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="CTDonHang">
+    <Key>
+      <PropertyRef Name="MaDonHang" />
+      <PropertyRef Name="Product_Id" />
+    </Key>
+    <Property Name="MaDonHang" Type="Int32" Nullable="false" />
+    <Property Name="Product_Id" Type="Int32" Nullable="false" />
+    <Property Name="SoLuong" Type="Int32" />
+    <Property Name="DonGia" Type="Decimal" Precision="18" Scale="0" />
+    <NavigationProperty Name="DonHang" Relationship="Self.FK_CTDonHang_DonHang1" FromRole="CTDonHang" ToRole="DonHang" />
+    <NavigationProperty Name="Product" Relationship="Self.FK_CTDonHang_tbl_Product1" FromRole="CTDonHang" ToRole="Product" />
+  </EntityType>
+  <Association Name="FK_DonHang_tbl_Customer1">
+    <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+    <End Role="DonHang" Type="Self.DonHang" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="Customer_Id" />
+      </Principal>
+      <Dependent Role="DonHang">
+        <PropertyRef Name="Customer_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CTDonHang_DonHang1">
+    <End Role="DonHang" Type="Self.DonHang" Multiplicity="1" />
+    <End Role="CTDonHang" Type="Self.CTDonHang" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DonHang">
+        <PropertyRef Name="MaDonHang" />
+      </Principal>
+      <Dependent Role="CTDonHang">
+        <PropertyRef Name="MaDonHang" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CTDonHang_tbl_Product1">
+    <End Role="Product" Type="Self.Product" Multiplicity="1" />
+    <End Role="CTDonHang" Type="Self.CTDonHang" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Product_Id" />
+      </Principal>
+      <Dependent Role="CTDonHang">
+        <PropertyRef Name="Product_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="MecuryshopEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Customers" EntityType="Self.Customer" />
+    <EntitySet Name="DonHangs" EntityType="Self.DonHang" />
+    <EntitySet Name="Products" EntityType="Self.Product" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <EntitySet Name="CTDonHangs" EntityType="Self.CTDonHang" />
+    <AssociationSet Name="FK_DonHang_tbl_Customer1" Association="Self.FK_DonHang_tbl_Customer1">
+      <End Role="Customer" EntitySet="Customers" />
+      <End Role="DonHang" EntitySet="DonHangs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CTDonHang_DonHang1" Association="Self.FK_CTDonHang_DonHang1">
+      <End Role="DonHang" EntitySet="DonHangs" />
+      <End Role="CTDonHang" EntitySet="CTDonHangs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CTDonHang_tbl_Product1" Association="Self.FK_CTDonHang_tbl_Product1">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="CTDonHang" EntitySet="CTDonHangs" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

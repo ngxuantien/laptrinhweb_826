@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MecuryshopModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Mecuryshop.dbo.CTDonHang' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="CTDonHang">
+    <Key>
+      <PropertyRef Name="MaDonHang" />
+      <PropertyRef Name="Product_Id" />
+    </Key>
+    <Property Name="MaDonHang" Type="int" Nullable="false" />
+    <Property Name="Product_Id" Type="int" Nullable="false" />
+    <Property Name="SoLuong" Type="int" />
+    <Property Name="DonGia" Type="decimal" Precision="18" Scale="0" />
+  </EntityType>
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="Customer_Id" />
+    </Key>
+    <Property Name="Customer_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Customer_Name" Type="nvarchar" MaxLength="250" />
+    <Property Name="Customer_Email" Type="varchar" MaxLength="250" />
+    <Property Name="Customer_Password" Type="varchar" MaxLength="250" />
+    <Property Name="Customer_Phone" Type="varchar" MaxLength="10" />
+    <Property Name="Customer_Address" Type="nvarchar" MaxLength="250" />
+    <Property Name="Customer_City" Type="nvarchar" MaxLength="250" />
+    <Property Name="Customer_Province" Type="nvarchar" MaxLength="250" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Mecuryshop.dbo.DatailProduct' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="DatailProduct">
+          <Property Name="Name" Type="nvarchar" MaxLength="250" />
+          <Property Name="Product_Id" Type="int" />
+        </EntityType>-->
+  <EntityType Name="DonHang">
+    <Key>
+      <PropertyRef Name="MaDonHang" />
+    </Key>
+    <Property Name="MaDonHang" Type="int" Nullable="false" />
+    <Property Name="Customer_Id" Type="int" />
+    <Property Name="NgayDat" Type="datetime" />
+    <Property Name="NgayGiao" Type="datetime" />
+    <Property Name="TinhTrangGiaoHang" Type="bit" />
+    <Property Name="TinhTrangThanhToan" Type="bit" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="Product_Id" />
+    </Key>
+    <Property Name="Product_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Product_Name" Type="nvarchar" MaxLength="250" />
+    <Property Name="Product_Size" Type="int" />
+    <Property Name="Product_Price" Type="float" />
+    <Property Name="Product_Img" Type="varchar" MaxLength="250" />
+    <Property Name="Product_Status" Type="bit" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <Association Name="FK_CTDonHang_DonHang1">
+    <End Role="DonHang" Type="Self.DonHang" Multiplicity="1" />
+    <End Role="CTDonHang" Type="Self.CTDonHang" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DonHang">
+        <PropertyRef Name="MaDonHang" />
+      </Principal>
+      <Dependent Role="CTDonHang">
+        <PropertyRef Name="MaDonHang" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CTDonHang_tbl_Product1">
+    <End Role="Product" Type="Self.Product" Multiplicity="1" />
+    <End Role="CTDonHang" Type="Self.CTDonHang" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Product_Id" />
+      </Principal>
+      <Dependent Role="CTDonHang">
+        <PropertyRef Name="Product_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <!--Errors Found During Generation:
+error 6004: The table 'Mecuryshop.dbo.DatailProduct' is referenced by a relationship, but cannot be found.
+        <Association Name="FK_DatailProduct_Product1" />-->
+  <Association Name="FK_DonHang_tbl_Customer1">
+    <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+    <End Role="DonHang" Type="Self.DonHang" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="Customer_Id" />
+      </Principal>
+      <Dependent Role="DonHang">
+        <PropertyRef Name="Customer_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="MecuryshopModelStoreContainer">
+    <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DonHang" EntityType="Self.DonHang" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CTDonHang" EntityType="Self.CTDonHang" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [CTDonHang].[MaDonHang] AS [MaDonHang], 
+    [CTDonHang].[Product_Id] AS [Product_Id], 
+    [CTDonHang].[SoLuong] AS [SoLuong], 
+    [CTDonHang].[DonGia] AS [DonGia]
+    FROM [dbo].[CTDonHang] AS [CTDonHang]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK_CTDonHang_DonHang1" Association="Self.FK_CTDonHang_DonHang1">
+      <End Role="DonHang" EntitySet="DonHang" />
+      <End Role="CTDonHang" EntitySet="CTDonHang" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CTDonHang_tbl_Product1" Association="Self.FK_CTDonHang_tbl_Product1">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="CTDonHang" EntitySet="CTDonHang" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DonHang_tbl_Customer1" Association="Self.FK_DonHang_tbl_Customer1">
+      <End Role="Customer" EntitySet="Customer" />
+      <End Role="DonHang" EntitySet="DonHang" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

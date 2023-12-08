@@ -1,0 +1,194 @@
+﻿@using Mercuryshop.Models;
+@*@model Mercuryshop.Models.Product*@
+@model List<Cart>
+
+@{
+    ViewBag.Title = "GioHang";
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>Giỏ hàng</h1>
+                <nav class="d-flex align-items-center">
+                    <a href="@Url.Action("Index", "Mercuryshop")">Trang chủ<span class="lnr lnr-arrow-right"></span></a>
+                    <a href="@Url.Action("DatHang", "ShopCart")">Thanh toán</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Banner Area -->
+<!--================Cart Area =================-->
+<section class="cart_area">
+    <div class="container">
+        <div class="cart_inner">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col"><input type="checkbox" class="all-checkbox" value="0" /></th>
+                            <th scope="col" style="display: flex; justify-content: center">Sản phẩm</th>
+                            <th scope="col" style="text-align:center; width:200px">Số lượng</th>
+                            <th scope="col" style="text-align:center">Đơn giá</th>
+                            <th scope="col" style="text-align:center">Thành tiền</th>
+                        </tr>
+                    </thead>
+                    @foreach (var item in Model)
+                    {
+                    <tr>
+                        <td class="select" style="width: 30px">
+                            <input type="checkbox" class="my-checkbox" value="@item.iMasp" />
+                        </td>
+                        <td style="width: 225px">
+                            <div class="media">
+                                <div class="d-flex">
+                                    <img src="~/Content/Theme/img/nike/@item.sAnhBia" alt="" style="width: 100px">
+                                </div>
+                                <div class="media-body">
+                                    <p>@item.sTensp</p>
+                                    <div class="action">
+                                        <a href="@Url.Action("XoaSPKhoiGioHang", "ShopCart", new{@iMasp = item.iMasp})" class="delete">
+                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>  
+                        </td>
+                        @using (Html.BeginForm("CapNhatGioHang", "ShopCart", new { iMasp = item.iMasp }))
+                        {
+                            <td>
+                                <div class="buttons_added" style="text-align:center">
+                                    <input class="minus is-form" type="button" value="-" onclick="Decrease(@item.iMasp)">
+                                    <input aria-label="quantity" class="input-qty" max="100" min="1" name="" type="number" value="@item.iSoLuong">
+                                    <input class="plus is-form" type="button" value="+" onclick="Increase(@item.iMasp)">
+                                </div>
+                            </td>
+                            <td align="center" style="width: 200px">@string.Format("{0:#,##0,0}", @item.dDonGia)</td>
+                            <td id="HienThi_@item.iMasp" align="center" style="width: 200px">@string.Format("{0:#,##0,0}", @item.dThanhTien)</td>
+                        }
+                    </tr>
+                    }
+                    <tr>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            <h5 style="text-align: center">Tổng tiền</h5>
+                        </td>
+                        <td>
+                            <h5 id="total-price" style="text-align: center">@string.Format("{0:#,##0,0}", ViewBag.TongTien)</h5>
+                        </td>
+                        <td style="text-align: center">
+                            <div class="checkout_btn_inner d-flex align-items-center" style="display:flex;justify-content:center">
+                                <a href="@Url.Action("DatHang","ShopCart")" class="primary-btn"  onclick="GetValueChecked()" >Thanh toán</a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="out_button_area">
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td></td>
+                        <td style="text-align: center">
+                            <a class="gray_btn" href="@Url.Action("XoaGioHang", "ShopCart")">Xóa giỏ hàng</a>
+                        </td>
+                        <td style="text-align: center">
+                            <a class="gray_btn" href="@Url.Action("Product","Mercuryshop")">Xem thêm sản phẩm</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+
+    @*function Increase(iMasp) {
+             $.ajax({
+             url: '@Url.Action("TangLen", "ShopCart")',
+             type: 'GET',
+                 data: { ms: iMasp },
+                 success: function (data) {
+                     /*$("#" + id).html(data);*/
+                     $("#HienThi_" + iMasp).html(data);
+                     updateTotalPrice();
+                 }
+             });
+        }
+
+        function updateTotalPrice() {
+             $.ajax({
+             url: '@Url.Action("hehe", "ShopCart")',
+             type: 'GET',
+                 success: function (data) {
+                     $("#total-price").html(data);
+                 }
+             });
+        }
+
+        function Decrease(iMasp) {
+             $.ajax({
+             url: '@Url.Action("GiamXuong", "ShopCart")',
+                 type: 'GET',
+                 data: { ms: iMasp },
+                 success: function (data) {
+                     $("#HienThi_" + iMasp).html(data);
+                     updateTotalPrice();
+                 }
+             });
+        }*@
+
+            $(".primary-btn").click(function () {
+                alert("hrehehahahahah");
+                var selectedValues = [];
+                    $(".my-checkbox:checked").each(function () {
+                        selectedValues.push($(this).val());
+                });
+
+                if (selectedValues.length > 0) {
+                    $.ajax({
+                    url: '@Url.Action("DatHang", "ShopCart")',
+                    type: 'POST',
+                    data: { selectedValues: selectedValues},
+                    success: function (data) {}
+                    });
+                }
+            });
+        });
+
+        @*$(document).ready(function () {
+            $(".my-checkbox").change(function () {
+                var selectedValues = [];
+                $(".my-checkbox:checked").each(function () {
+                    selectedValues.push($(this).val());
+
+                });
+                alert(selectedValues);
+                    $.ajax({
+                        url: '@Url.Action("Taodstt", "ShopCart")',
+                        type: 'POST',
+                        data: { selectedValues: selectedValues },
+                        success: function (data) {
+                            $("#total-price").html(data);
+                        }
+                    });
+                });
+        });*@
+
+        //$(document).ready(function () {
+        //    $('.all-checkbox').change(function () {
+        //        if ($(this).prop('checked')) {
+        //            $('.my-checkbox').prop('checked', true);
+        //        } else {
+        //            $('.my-checkbox').prop('checked', false);
+        //        }
+        //    });
+        //});
+
+</script>
